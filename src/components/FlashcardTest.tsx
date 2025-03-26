@@ -115,8 +115,10 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
         ></div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-        <h3 className="text-xl font-medium text-gray-800 mb-4">{currentCard.question}</h3>
+      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6">
+        <div className="text-base sm:text-xl font-medium text-gray-800 mb-4 overflow-auto max-h-[30vh]">
+          {currentCard.question}
+        </div>
         
         <div className="space-y-3">
           {shuffledOptions.map((option, index) => (
@@ -136,12 +138,12 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
             >
               <div className="flex items-center">
                 <span className="mr-2">{String.fromCharCode(65 + index)}.</span>
-                <span className="flex-1">{option}</span>
+                <span className="flex-1 text-sm sm:text-base">{option}</span>
                 {selectedOption === option && option === currentCard.answer && (
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
                 )}
                 {selectedOption === option && option !== currentCard.answer && (
-                  <XCircle className="w-5 h-5 text-red-600" />
+                  <XCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
                 )}
               </div>
             </button>
@@ -153,7 +155,7 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
             {isCorrect ? (
               <div className="p-3 rounded-md bg-green-50 text-green-800">
                 <div className="flex items-center mb-2">
-                  <CheckCircle className="w-5 h-5 mr-2" />
+                  <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
                   <span className="font-medium">Correct! Well done.</span>
                 </div>
                 {currentCard.correctReasoning && (
@@ -163,8 +165,8 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
             ) : (
               <div className="p-3 rounded-md bg-red-50 text-red-800">
                 <div className="flex items-center mb-2">
-                  <XCircle className="w-5 h-5 mr-2" />
-                  <span className="font-medium">Incorrect. The correct answer is: {currentCard.answer}</span>
+                  <XCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+                  <span className="font-medium text-sm sm:text-base">Incorrect. The correct answer is: {currentCard.answer}</span>
                 </div>
                 {currentCard.incorrectReasoning && (
                   <p className="text-sm">{currentCard.incorrectReasoning}</p>
@@ -181,26 +183,26 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
         )}
       </div>
 
-      <div className="flex justify-between items-center">
-        <div className="text-lg font-medium">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <div className="text-base sm:text-lg font-medium">
           Score: {score}/{answered.size} ({answered.size > 0 ? Math.round((score / answered.size) * 100) : 0}%)
         </div>
 
-        <div className="flex space-x-3">
+        <div className="flex flex-wrap gap-2 justify-end">
           <button
             onClick={resetQuiz}
-            className="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+            className="flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 text-sm"
           >
-            <RotateCcw className="w-4 h-4 mr-1" />
+            <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
             Reset
           </button>
 
           {answered.size > 0 && (
             <button
               onClick={() => setShowSummary(true)}
-              className="flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200"
+              className="flex items-center px-3 py-1.5 sm:px-4 sm:py-2 bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200 text-sm"
             >
-              <FileText className="w-4 h-4 mr-1" />
+              <FileText className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
               View Summary
             </button>
           )}
@@ -208,7 +210,7 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
           {selectedOption && (
             <button
               onClick={handleNextQuestion}
-              className={`px-4 py-2 rounded-md ${
+              className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-sm ${
                 isLastQuestion
                   ? 'bg-green-600 text-white hover:bg-green-700'
                   : 'bg-blue-600 text-white hover:bg-blue-700'

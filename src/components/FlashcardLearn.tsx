@@ -56,32 +56,36 @@ const FlashcardLearn: React.FC<FlashcardLearnProps> = ({ cards }) => {
       </div>
 
       <div 
-        className={`relative w-full h-auto min-h-64 rounded-xl shadow-lg cursor-pointer transition-all duration-500 transform ${
+        className={`relative w-full rounded-xl shadow-lg cursor-pointer transition-all duration-500 transform ${
           isFlipped ? 'bg-indigo-50' : 'bg-white'
         }`}
         onClick={handleFlip}
         style={{ perspective: '1000px' }}
       >
         <div 
-          className={`absolute inset-0 backface-visibility-hidden transition-all duration-500 transform rounded-xl flex items-center justify-center p-6 ${
+          className={`absolute inset-0 backface-visibility-hidden transition-all duration-500 transform rounded-xl flex items-center justify-center p-4 sm:p-6 ${
             isFlipped ? 'rotate-y-180 opacity-0' : 'rotate-y-0 opacity-100'
           }`}
         >
-          <div className="text-center">
-            <h3 className="text-xl font-medium text-gray-800 mb-2">Question</h3>
-            <p className="text-gray-700 text-lg">{currentCard.question}</p>
+          <div className="text-center w-full">
+            <h3 className="text-lg sm:text-xl font-medium text-gray-800 mb-2">Question</h3>
+            <div className="text-gray-700 text-base sm:text-lg overflow-auto max-h-[50vh] px-2">
+              {currentCard.question}
+            </div>
             <div className="mt-4 text-sm text-gray-500">Click to reveal answer</div>
           </div>
         </div>
 
         <div 
-          className={`absolute inset-0 backface-visibility-hidden transition-all duration-500 transform rounded-xl flex items-center justify-center p-6 ${
+          className={`absolute inset-0 backface-visibility-hidden transition-all duration-500 transform rounded-xl flex items-center justify-center p-4 sm:p-6 ${
             isFlipped ? 'rotate-y-0 opacity-100' : 'rotate-y-180 opacity-0'
           }`}
         >
-          <div className="text-center">
-            <h3 className="text-xl font-medium text-indigo-700 mb-2">Answer</h3>
-            <p className="text-gray-800 text-lg">{currentCard.answer}</p>
+          <div className="text-center w-full">
+            <h3 className="text-lg sm:text-xl font-medium text-indigo-700 mb-2">Answer</h3>
+            <div className="text-gray-800 text-base sm:text-lg overflow-auto max-h-[50vh] px-2">
+              {currentCard.answer}
+            </div>
             
             {currentCard.correctReasoning && (
               <div className="mt-4 p-3 bg-green-50 rounded-lg text-left">
@@ -95,17 +99,20 @@ const FlashcardLearn: React.FC<FlashcardLearnProps> = ({ cards }) => {
         </div>
       </div>
 
+      {/* Add minimum height to ensure card has proper dimensions even with short content */}
+      <div className="min-h-[300px] sm:min-h-[350px]"></div>
+
       <div className="mt-6 flex justify-between">
         <button
           onClick={handlePrevious}
           disabled={currentIndex === 0}
-          className={`flex items-center px-4 py-2 rounded-md ${
+          className={`flex items-center px-3 py-2 sm:px-4 sm:py-2 rounded-md text-sm sm:text-base ${
             currentIndex === 0
               ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
           }`}
         >
-          <ChevronLeft className="w-5 h-5 mr-1" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 mr-1" />
           Previous
         </button>
 
@@ -114,23 +121,23 @@ const FlashcardLearn: React.FC<FlashcardLearnProps> = ({ cards }) => {
             setIsFlipped(false);
             setCurrentIndex(0);
           }}
-          className="flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+          className="flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 text-sm sm:text-base"
         >
-          <RotateCcw className="w-4 h-4 mr-1" />
+          <RotateCcw className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
           Reset
         </button>
 
         <button
           onClick={handleNext}
           disabled={currentIndex === cards.length - 1}
-          className={`flex items-center px-4 py-2 rounded-md ${
+          className={`flex items-center px-3 py-2 sm:px-4 sm:py-2 rounded-md text-sm sm:text-base ${
             currentIndex === cards.length - 1
               ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : 'bg-blue-600 text-white hover:bg-blue-700'
           }`}
         >
           Next
-          <ChevronRight className="w-5 h-5 ml-1" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 ml-1" />
         </button>
       </div>
     </div>
