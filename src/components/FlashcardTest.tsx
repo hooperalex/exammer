@@ -95,12 +95,13 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
     } else {
       // For single answer, just select one
       setSelectedOptions([option]);
-      handleSubmitAnswer();
+      // For single answer questions, submit immediately
+      setTimeout(() => handleSubmitAnswer([option]), 100);
     }
   };
   
-  const handleSubmitAnswer = () => {
-    if (hasSubmitted || (hasMultipleCorrectAnswers() && selectedOptions.length === 0)) return;
+  const handleSubmitAnswer = (options = selectedOptions) => {
+    if (hasSubmitted || (hasMultipleCorrectAnswers() && options.length === 0)) return;
     
     setHasSubmitted(true);
     const correctAnswers = getCorrectAnswers();
@@ -110,12 +111,12 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
     if (hasMultipleCorrectAnswers()) {
       // For multiple correct answers, check if all selected options are correct
       // and if all correct answers are selected
-      const allSelectedAreCorrect = selectedOptions.every(opt => correctAnswers.includes(opt));
-      const allCorrectAreSelected = correctAnswers.every(ans => selectedOptions.includes(ans));
+      const allSelectedAreCorrect = options.every(opt => correctAnswers.includes(opt));
+      const allCorrectAreSelected = correctAnswers.every(ans => options.includes(ans));
       correct = allSelectedAreCorrect && allCorrectAreSelected;
     } else {
       // For single answer, check if the selected option is correct
-      correct = correctAnswers.includes(selectedOptions[0]);
+      correct = correctAnswers.includes(options[0]);
     }
     
     setIsCorrect(correct);
@@ -131,7 +132,7 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
     // Store user's answer
     setUserAnswers(prev => ({
       ...prev,
-      [currentCard.id]: selectedOptions
+      [currentCard.id]: options
     }));
   };
 
@@ -196,7 +197,7 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
               <button
                 key={index}
                 onClick={() => handleOptionSelect(option)}
-                disabled={hasSubmitted && !hasMultipleCorrectAnswers()}
+                disabled={hasSubmitted}
                 className={`w-full text-left p-3 rounded-lg transition-colors ${
                   isSelected
                     ? hasSubmitted
@@ -227,7 +228,7 @@ const FlashcardTest: React.FC<FlashcardTestProps> = ({ cards }) => {
         {hasMultipleCorrectAnswers() && !hasSubmitted && selectedOptions.length > 0 && (
           <div className="mt-4">
             <button
-              onClick={handleSubmitAnswer}
+              onClick={() => handleSubmitAnswer()}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               Submit Answer
