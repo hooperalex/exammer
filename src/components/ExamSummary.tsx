@@ -12,10 +12,14 @@ const ExamSummary: React.FC<ExamSummaryProps> = ({ cards, userAnswers, onClose }
   const exportToCSV = () => {
     // Create CSV content
     const headers = ['question', 'answer', 'incorrect_answers', 'correct_reasoning', 'incorrect_reasoning'];
-    const rows = cards.map(card => {
+    
+    // Filter to include only wrong questions
+    const wrongQuestions = cards.filter(card => {
       const userAnswer = userAnswers[card.id] || '';
-      const isCorrect = userAnswer === card.answer;
-      
+      return userAnswer !== card.answer;
+    });
+    
+    const rows = wrongQuestions.map(card => {
       // Get incorrect answers (all options except the correct one)
       const incorrectOptions = (card.options || [])
         .filter(opt => opt !== card.answer)
@@ -45,7 +49,7 @@ const ExamSummary: React.FC<ExamSummaryProps> = ({ cards, userAnswers, onClose }
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', 'flashcard_results.csv');
+    link.setAttribute('download', 'wrong_questions.csv');
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
@@ -57,6 +61,9 @@ const ExamSummary: React.FC<ExamSummaryProps> = ({ cards, userAnswers, onClose }
   const answeredQuestions = Object.keys(userAnswers).length;
   const correctAnswers = cards.filter(card => userAnswers[card.id] === card.answer).length;
   const score = answeredQuestions > 0 ? Math.round((correctAnswers / answeredQuestions) * 100) : 0;
+
+  // Count wrong questions
+  const wrongQuestionsCount = answeredQuestions - correctAnswers;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -135,9 +142,11 @@ const ExamSummary: React.FC<ExamSummaryProps> = ({ cards, userAnswers, onClose }
           <button
             onClick={exportToCSV}
             className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center"
+            disabled={wrongQuestionsCount === 0}
+            title={wrongQuestionsCount === 0 ? "No wrong questions to export" : ""}
           >
             <Download className="w-4 h-4 mr-2" />
-            Export Results as CSV
+            Export Wrong Questions ({wrongQuestionsCount})
           </button>
         </div>
       </div>

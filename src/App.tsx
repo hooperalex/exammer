@@ -1,13 +1,15 @@
 import React, { useState, useCallback } from 'react';
-import { BookOpen, CheckSquare, BrainCircuit, Upload } from 'lucide-react';
+import { BookOpen, CheckSquare, BrainCircuit, Upload, HelpCircle } from 'lucide-react';
 import CSVUploader from './components/CSVUploader';
 import FlashcardLearn from './components/FlashcardLearn';
 import FlashcardTest from './components/FlashcardTest';
+import Tutorial from './components/Tutorial';
 import { Flashcard, Mode } from './types';
 
 function App() {
   const [cards, setCards] = useState<Flashcard[]>([]);
   const [mode, setMode] = useState<Mode | null>(null);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const handleCardsLoaded = (loadedCards: Flashcard[]) => {
     console.log("Cards loaded in App:", loadedCards);
@@ -82,6 +84,20 @@ function App() {
               Upload a CSV file with your questions and answers to get started. 
               The CSV should have at least two columns: question and answer.
             </p>
+            
+            {showTutorial ? (
+              <Tutorial onClose={() => setShowTutorial(false)} />
+            ) : (
+              <div className="mb-6">
+                <button
+                  onClick={() => setShowTutorial(true)}
+                  className="inline-flex items-center px-4 py-2 bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200 transition-colors"
+                >
+                  <HelpCircle className="w-4 h-4 mr-2" />
+                  How it works
+                </button>
+              </div>
+            )}
             
             <div className="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Get Started</h3>
