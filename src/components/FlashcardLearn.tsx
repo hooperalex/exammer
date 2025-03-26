@@ -55,36 +55,38 @@ const FlashcardLearn: React.FC<FlashcardLearnProps> = ({ cards }) => {
         ></div>
       </div>
 
-      <div 
-        className={`relative w-full rounded-xl shadow-lg cursor-pointer transition-all duration-500 transform ${
-          isFlipped ? 'bg-indigo-50' : 'bg-white'
-        }`}
-        onClick={handleFlip}
-        style={{ perspective: '1000px' }}
-      >
+      <div className="relative w-full h-[400px] mb-6">
+        {/* Front of card (Question) */}
         <div 
-          className={`absolute inset-0 backface-visibility-hidden transition-all duration-500 transform rounded-xl flex items-center justify-center p-4 sm:p-6 ${
-            isFlipped ? 'rotate-y-180 opacity-0' : 'rotate-y-0 opacity-100'
+          onClick={handleFlip}
+          className={`absolute inset-0 w-full h-full rounded-xl shadow-lg p-4 sm:p-6 bg-white cursor-pointer transition-all duration-500 ${
+            isFlipped ? 'opacity-0 pointer-events-none' : 'opacity-100'
           }`}
         >
-          <div className="text-center w-full">
-            <h3 className="text-lg sm:text-xl font-medium text-gray-800 mb-2">Question</h3>
-            <div className="text-gray-700 text-base sm:text-lg overflow-auto max-h-[50vh] px-2">
-              {currentCard.question}
+          <div className="flex flex-col h-full">
+            <h3 className="text-lg sm:text-xl font-medium text-gray-800 mb-2 text-center">Question</h3>
+            <div className="flex-1 overflow-y-auto text-center">
+              <p className="text-gray-700 text-base sm:text-lg px-2">
+                {currentCard.question}
+              </p>
             </div>
-            <div className="mt-4 text-sm text-gray-500">Click to reveal answer</div>
+            <div className="mt-4 text-sm text-gray-500 text-center">Click to reveal answer</div>
           </div>
         </div>
 
+        {/* Back of card (Answer) */}
         <div 
-          className={`absolute inset-0 backface-visibility-hidden transition-all duration-500 transform rounded-xl flex items-center justify-center p-4 sm:p-6 ${
-            isFlipped ? 'rotate-y-0 opacity-100' : 'rotate-y-180 opacity-0'
+          onClick={handleFlip}
+          className={`absolute inset-0 w-full h-full rounded-xl shadow-lg p-4 sm:p-6 bg-indigo-50 cursor-pointer transition-all duration-500 ${
+            isFlipped ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
         >
-          <div className="text-center w-full">
-            <h3 className="text-lg sm:text-xl font-medium text-indigo-700 mb-2">Answer</h3>
-            <div className="text-gray-800 text-base sm:text-lg overflow-auto max-h-[50vh] px-2">
-              {currentCard.answer}
+          <div className="flex flex-col h-full">
+            <h3 className="text-lg sm:text-xl font-medium text-indigo-700 mb-2 text-center">Answer</h3>
+            <div className="flex-1 overflow-y-auto text-center">
+              <p className="text-gray-800 text-base sm:text-lg px-2">
+                {currentCard.answer}
+              </p>
             </div>
             
             {currentCard.correctReasoning && (
@@ -94,13 +96,10 @@ const FlashcardLearn: React.FC<FlashcardLearnProps> = ({ cards }) => {
               </div>
             )}
             
-            <div className="mt-4 text-sm text-gray-500">Click to see question</div>
+            <div className="mt-4 text-sm text-gray-500 text-center">Click to see question</div>
           </div>
         </div>
       </div>
-
-      {/* Add minimum height to ensure card has proper dimensions even with short content */}
-      <div className="min-h-[300px] sm:min-h-[350px]"></div>
 
       <div className="mt-6 flex justify-between">
         <button
